@@ -1,0 +1,16 @@
+.login-inputs {
+    height: 100%;
+    width: 50%;
+}
+#container .li-container {
+    border: none;
+}
+
+#c1 {
+    width: 50vw;
+    text-align: center;
+}
+
+#c2 {
+    width: 50vw;
+}
