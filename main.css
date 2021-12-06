@@ -1,0 +1,19 @@
+body {
+    text-align: center;
+}
+.h {
+    font-size: 30px;
+}
+#header-container {
+    height: 10vh;
+    width: 100vw;
+}
+#container {
+    height: 90vh;
+    width: 100vw;
+    display: flex;
+}
+.col {
+    border: solid black;
+    width: 33vw;
+}
