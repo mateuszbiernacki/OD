@@ -1,5 +1,9 @@
 body {
     text-align: center;
+    padding: 0;
+    background-color: darkkhaki;
+    font-family: sans-serif;
+    margin: 3vh;
 }
 .h {
     font-size: 30px;
@@ -7,13 +11,50 @@ body {
 #header-container {
     height: 10vh;
     width: 100vw;
+    margin: 3vh;
 }
 #container {
-    height: 90vh;
     width: 100vw;
     display: flex;
+    text-align: left;
 }
+
+.options {
+    list-style: none;
+}
+
+#container .li-container {
+    padding: 20px;
+    margin: 3px;
+    border: solid 1px;
+}
+
+.li-container {
+    display: flex;
+}
+
+.li-container .li-div {
+    flex-grow: 15;
+}
+
+.li-container .button-div {
+    flex-grow: 1;
+}
+
+.li-container .button-div button {
+    float: right;
+}
+
+
 .col {
-    border: solid black;
     width: 33vw;
+}
+
+#c1 {
+    width: 66vw;
+}
+
+.var {
+    color: crimson;
+    font-weight: bold;
 }
