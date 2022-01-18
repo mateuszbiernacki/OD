@@ -174,7 +174,8 @@ def groups():
 @app.route('/adminLogin', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def adminLogin():
-    data = request.form.to_dict()
+    data = request.get_json()
+    print(data)
     mail = data['Mail']
     password = data['Password']
     otp_code = data['OTPCode']
@@ -194,8 +195,9 @@ def adminLogin():
 @app.route('/newAdmin', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def newAdmin():
-    data = request.form.to_dict()
+    data = request.get_json()
     mail = data['Mail']
+    print(mail, 'dfs')
     password = data['Password']
     otp = OTP()
     imgName, secret = otp.generateQRCode(mail)

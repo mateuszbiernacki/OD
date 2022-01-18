@@ -7,7 +7,7 @@ import os
 class Mailing:
     def __init__(self):
         self.adres = 'evotingpp@gmail.com'
-        self.haslo = ''
+        self.haslo = 'V3ryS3cur3Pa55w0rD'
 
     def SendWelcomeEmail(self, imie_nazwisko, odbiorca, qr_name):
         msg = EmailMessage()
