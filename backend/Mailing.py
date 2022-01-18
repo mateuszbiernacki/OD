@@ -42,7 +42,7 @@ class Mailing:
             server.login(self.adres, self.haslo)
             server.sendmail(self.adres, odbiorca, msg.as_string())
 
-    def SendVotingEmail(self, imie_nazwisko, odbiorca, voting_link):
+    def SendVotingEmail(self, odbiorca, imie_nazwisko, voting_link):
         msg = EmailMessage()
         msg['Subject'] = 'Nowe głosowanie w systemie eVotingPP'
         msg['From'] = 'eVotingPP <' + self.adres + '>'
@@ -54,11 +54,11 @@ class Mailing:
                 <p>
                     <h1>Masz dostęp do nowego głosowania w systemie eVotingPP.</h1><br>
                     Kliknij w poniższy link aby zagłosować.<br>
-                    <a href="{voting_link}">Zagłosuj</a>
+                    <a href="{link}">Zagłosuj</a>
                 </p>
             </body>
         </html>
-        """.format(voting_link=voting_link), subtype='html')
+        """.format(link=voting_link), subtype='html')
 
         context = ssl.create_default_context()
 

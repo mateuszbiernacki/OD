@@ -7,6 +7,7 @@ from VoteDB import VoteDB
 import hashlib
 import os
 import datetime
+import json
 
 app = Flask(__name__)
 
@@ -45,6 +46,28 @@ def authorize():
         return "Wrong OTP Code", 403
     return "Authorized", 200
 
+@app.route('/results', methods=['GET'])
+def results():
+    data = request.form.to_dict()
+    voteNumber = data['VoteNumber']
+    vote = VoteDB()
+    results = vote.GetVoteResults(voteNumber)
+    if results != None:
+        return json.dumps(results), 200
+    return "Voting not found", 404
+
+@app.route('/userResults', methods=['GET'])
+def userResults():
+    data = request.form.to_dict()
+    voteNumber = data['VoteNumber']
+    vote = VoteDB()
+    userResults = vote.GetVoteUserResults(voteNumber)
+    if userResults == None:
+        return "Voting not found", 404
+    elif userResults == False:
+        return "Voting is not open", 200
+    return json.dumps(userResults), 200
+
 @app.route('/addUserToGroup', methods=['PUT'])
 def addUserToGroup():
     data = request.form.to_dict()
@@ -75,13 +98,17 @@ def newVote():
     for group in entitled:
         mails = user.GetGroupUserEmails(group)
         for i in mails:
-            emails.append((i, user.GetUserFirstLastName(i), hashlib.sha512((i + str(number)).encode()).hexdigest()))
+            if votingOpen == 'true':
+                emails.append((i, user.GetUserFirstLastName(i), user.GetUserID(i)))
+            else:
+                emails.append((i, user.GetUserFirstLastName(i), hashlib.sha512((i + str(number)).encode()).hexdigest()))
     entitledList = list()
     for i in emails:
         if votingOpen == 'true':
             entitledList.append({'id':i[2], 'głosował':'false', 'wybór':''})
         else:
             entitledList.append({'id':i[2], 'głosował':'false'})
+    sendEmails(emails)
     optionsList = list()
     for i in options:
         optionsList.append({'wybór':i, 'głosów':0})
@@ -93,6 +120,44 @@ def newVote():
     endInfo = datetime.datetime(int(endDate[2]), int(endDate[1]), int(endDate[0]), int(endTime[0]), int(endTime[1]))
     vote.AddNewVoting(number, question, qorum, startInfo, endInfo, entitledList, optionsList)
     return "Created new voting", 201
+
+@app.route('/checkVote', methods=['GET'])
+def checkVote():
+    data = request.form.to_dict()
+    voteNumber = data['VoteNumber']
+    userID = data['UserID']
+    vote = VoteDB()
+    status = vote.GetVoteStatus(VoteNumber, userID)
+    if status != None:
+        return status, 200
+    return "Voting not found", 404
+
+@app.route('/addVote', methods=['POST'])
+def addVote():
+    data = request.form.to_dict()
+    voteNumber = data['VoteNumber']
+    userID = data['UserID']
+    choice = data['Choice']
+    vote = VoteDB()
+    wynik = ""
+    wynik2 = ""
+    if vote.IsVoteOpen(voteNumber):
+        wynik = vote.AddOpenVote(voteNumber, userID, choice)
+    else:
+        wynik = vote.AddClosedVote(voteNumber, userID)
+        print(wynik)
+    if wynik:
+        wynik2 = vote.AddChoice(voteNumber, choice)
+        if wynik2:
+            return "Vote added", 201
+        return "User not found", 404
+    return "Voting not found", 404
+
+def sendEmails(emails):
+    mailing = Mailing()
+    for i in emails:
+        voting_link = "http://localhost:3000/vote?id=" + str(i[2])
+        mailing.SendVotingEmail(i[0], i[1], voting_link)
 
 if __name__ == '__main__':
     app.run()

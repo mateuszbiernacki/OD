@@ -15,6 +15,11 @@ class UserDB:
         }
         self.user.insert_one(newUser)
 
+    def GetUserID(self, email):
+        user = self.user.find_one({"e-mail":email})
+        if user != None:
+            return user['_id']
+
     def GetUserFirstLastName(self, email):
         user = self.user.find_one({"e-mail":email}, {"imię":1, "nazwisko":1})
         if user != None:
