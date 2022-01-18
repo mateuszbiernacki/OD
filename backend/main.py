@@ -153,6 +153,12 @@ def addVote():
         return "User not found", 404
     return "Voting not found", 404
 
+@app.route('/groups', methods=['GET'])
+def groups():
+    user = UserDB()
+    groups = user.GetAllGroups()
+    return json.dumps(groups), 200
+
 def sendEmails(emails):
     mailing = Mailing()
     for i in emails:

@@ -37,7 +37,7 @@ db.admin.insert(
 );
 
 db.vote.insert(
-    { "nr_głosowania":"2021/1", "pytanie":"Zajęcia zdalne", "kworum":20, "początek":"2021-12-02T9:05:00.000Z", "koniec":"2021-12-02T11:05:00.000Z", "za":10, "przeciw":4, 
+    { "nr_głosowania":"2021/1", "pytanie":"Zajęcia zdalne", "kworum":20, "początek":"2021-12-02T9:05:00.000Z", "koniec":"2021-12-02T11:05:00.000Z",
 "uprawnieni": [
     { "id":"1c88ef55801f80e116dd19ebf65ad8da137cf991e3eae10e50bc25532f5fc7facbe8c888cba65930cba55f6566b845b4ce2a4eb2109164a82302ec9ea1fb150e", "głosował":true},
     { "id":"60ad9c31ad5fe93ec4a8ef2e3c77b8ccdb9303e56c2737b318618ec2db000f20657579c8d879efd970b313e1100c1cf6f3954418ee6328f47ce4475fcca88dd9", "głosował":true},
@@ -63,11 +63,15 @@ db.vote.insert(
     { "id":"52b7832501f1fe4ae81d6599c3094068bc196356db3bed10e0377db80b6b5923bf96f823f4b6dfe7286897eef4682a6feacd2823e310ee77ab8c3c74163fc4c0", "głosował":false},
     { "id":"62983412f6c6d7b58d7c2041eedfe6775373b3b1840fbf584ad270564ed99aacca569e90df0635724f39f987147c88bcb013c0bd4e84c9598ff8c77366937b89", "głosował":false},
     { "id":"29f6ed626beb537502d8ccbc0d3c51479d0c4dfb4636641fb28b709be6867196db9baf57ed25c787f9dd322c7dd2931b0871ca8b90ac8b4f56fc277d3d2e68a2", "głosował":false}
+],
+"wyniki": [
+    { "wybór":"Za", "głosów":"10"},
+    { "wybór":"Przeciw", "głosów":"4"}
 ]
 });
 
 db.vote.insert(
-    { "nr_głosowania":"2021/2", "pytanie":"Sesja zdalna", "kworum":"20", "początek":"2021-12-02T12:05:00.000Z", "koniec":"2021-12-02T14:05:00.000Z", "za":"10", "przeciw":"4", "wstrzymało_się":"2", 
+    { "nr_głosowania":"2021/2", "pytanie":"Sesja zdalna", "kworum":"20", "początek":"2021-12-02T12:05:00.000Z", "koniec":"2021-12-02T14:05:00.000Z", 
 "uprawnieni": [
     { "id":"1c88ef55801f80e116dd19ebf65ad8da137cf991e3eae10e50bc25532f5fc7facbe8c888cba65930cba55f6566b845b4ce2a4eb2109164a82302ec9ea1fb150e", "głosował":true, "wybór":"przeciw"},
     { "id":"60ad9c31ad5fe93ec4a8ef2e3c77b8ccdb9303e56c2737b318618ec2db000f20657579c8d879efd970b313e1100c1cf6f3954418ee6328f47ce4475fcca88dd9", "głosował":true, "wybór":"za"},
@@ -93,5 +97,10 @@ db.vote.insert(
     { "id":"52b7832501f1fe4ae81d6599c3094068bc196356db3bed10e0377db80b6b5923bf96f823f4b6dfe7286897eef4682a6feacd2823e310ee77ab8c3c74163fc4c0", "głosował":false, "wybór":""},
     { "id":"62983412f6c6d7b58d7c2041eedfe6775373b3b1840fbf584ad270564ed99aacca569e90df0635724f39f987147c88bcb013c0bd4e84c9598ff8c77366937b89", "głosował":false, "wybór":""},
     { "id":"29f6ed626beb537502d8ccbc0d3c51479d0c4dfb4636641fb28b709be6867196db9baf57ed25c787f9dd322c7dd2931b0871ca8b90ac8b4f56fc277d3d2e68a2", "głosował":false, "wybór":""}
+],
+"wyniki": [
+    { "wybór":"Za", "głosów":"10"},
+    { "wybór":"Przeciw", "głosów":"4"},
+    { "wybór":"Wstrzymało się", "głosów":"2"}
 ]
 });

@@ -63,3 +63,12 @@ class UserDB:
             self.user.update_one({"_id":user["_id"]}, {"$pull": {"grupy":group}})
             return True
         return False
+
+    def GetAllGroups(self):
+        groupsList = list()
+        groups = self.user.find({})
+        for i in groups:
+            for j in i['grupy']:
+                if j not in groupsList:
+                    groupsList.append(j)
+        return groupsList
