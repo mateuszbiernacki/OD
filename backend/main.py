@@ -107,10 +107,11 @@ def newVote():
     for group in entitled:
         mails = user.GetGroupUserEmails(group)
         for i in mails:
-            if votingOpen == 'true':
-                emails.append((i, user.GetUserFirstLastName(i), user.GetUserID(i)))
-            else:
-                emails.append((i, user.GetUserFirstLastName(i), hashlib.sha512((i + str(number)).encode()).hexdigest()))
+            if i not in emails:
+                if votingOpen == 'true':
+                    emails.append((i, user.GetUserFirstLastName(i), user.GetUserID(i)))
+                else:
+                    emails.append((i, user.GetUserFirstLastName(i), hashlib.sha512((i + str(number)).encode()).hexdigest()))
     entitledList = list()
     for i in emails:
         if votingOpen == 'true':
@@ -139,7 +140,23 @@ def checkVote():
     vote = VoteDB()
     status = vote.GetVoteStatus(voteNumber, userID)
     if status != None:
-        return status, 200
+        if status == True:
+            start = vote.GetVotingStartTime(voteNumber)
+            startTime = start.split('-')
+            startTime2 = startTime[2].split('T')
+            startTime3 = startTime2[1].split(':')
+            start = datetime.datetime(int(startTime[0]), int(startTime[1]), int(startTime2[0]), int(startTime3[0]), int(startTime3[1]))
+            end = vote.GetVotingEndTime(voteNumber)
+            endTime = end.split('-')
+            endTime2 = endTime[2].split('T')
+            endTime3 = endTime2[1].split(':')
+            end = datetime.datetime(int(endTime[0]), int(endTime[1]), int(endTime2[0]), int(endTime3[0]), int(endTime3[1]))
+            now = datetime.datetime.now()
+            result = start <= now <= end
+            if result == True:
+                return "OK", 200
+            else:
+                return "Voting not available", 403
     return "Voting not found", 404
 
 @app.route('/addVote', methods=['POST'])

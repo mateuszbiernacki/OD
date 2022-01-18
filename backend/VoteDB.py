@@ -83,7 +83,6 @@ class VoteDB:
                 return False
         return None
 
-
     def GetVotingStartTime(self, vote_number):
         voting = self.vote.find_one({"nr_głosowania":vote_number})
         if voting != None:
