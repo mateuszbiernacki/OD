@@ -4,6 +4,7 @@ from Mailing import Mailing
 from AuthDB import AuthDB
 from UserDB import UserDB
 from VoteDB import VoteDB
+from AdminDB import AdminDB
 import hashlib
 import os
 import datetime
@@ -127,7 +128,7 @@ def checkVote():
     voteNumber = data['VoteNumber']
     userID = data['UserID']
     vote = VoteDB()
-    status = vote.GetVoteStatus(VoteNumber, userID)
+    status = vote.GetVoteStatus(voteNumber, userID)
     if status != None:
         return status, 200
     return "Voting not found", 404
@@ -158,6 +159,41 @@ def groups():
     user = UserDB()
     groups = user.GetAllGroups()
     return json.dumps(groups), 200
+
+@app.route('/adminLogin', methods=['POST'])
+def adminLogin():
+    data = request.form.to_dict()
+    mail = data['Mail']
+    password = data['Password']
+    otp_code = data['OTPCode']
+    admin = AdminDB()
+
+    secret = admin.GetAdminOTPCode(mail)
+    otp = OTP()
+    result = otp.verify(otp_code, secret)
+    if result == False:
+        return "Wrong OTP Code", 403
+
+    passwordFromDB = admin.GetAdminPassword(mail)
+    if passwordFromDB == hashlib.sha512(password.encode()).hexdigest():
+        return "Logged in", 200
+    return "Wrong password", 403
+
+@app.route('/newAdmin', methods=['POST'])
+def newAdmin():
+    data = request.form.to_dict()
+    mail = data['Mail']
+    password = data['Password']
+    otp = OTP()
+    imgName, secret = otp.generateQRCode(mail)
+    admin = AdminDB()
+    result = admin.AddNewAdmin(mail, hashlib.sha512(password.encode()).hexdigest(), secret)
+    if result == False:
+        os.remove(imgName)
+        return "Admin exists", 400
+    mailing = Mailing()
+    mailing.SendAdminWelcomeEmail(mail, imgName)
+    return "Added new admin " + mail, 201
 
 def sendEmails(emails):
     mailing = Mailing()
