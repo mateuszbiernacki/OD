@@ -1,4 +1,5 @@
 from flask import Flask, request, send_file
+from flask_cors import CORS, cross_origin
 from OTP import OTP
 from Mailing import Mailing
 from AuthDB import AuthDB
@@ -11,8 +12,10 @@ import datetime
 import json
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
 
 @app.route('/newUser', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def newUser():
     data = request.form.to_dict()
     firstName = data['FirstName']
@@ -33,6 +36,7 @@ def newUser():
     return "Added new user " + firstName + ' ' + lastName, 201
 
 @app.route('/authorize', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def authorize():
     data = request.form.to_dict()
     mail = data['Mail']
@@ -48,6 +52,7 @@ def authorize():
     return "Authorized", 200
 
 @app.route('/results', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def results():
     data = request.form.to_dict()
     voteNumber = data['VoteNumber']
@@ -58,6 +63,7 @@ def results():
     return "Voting not found", 404
 
 @app.route('/userResults', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def userResults():
     data = request.form.to_dict()
     voteNumber = data['VoteNumber']
@@ -70,6 +76,7 @@ def userResults():
     return json.dumps(userResults), 200
 
 @app.route('/addUserToGroup', methods=['PUT'])
+@cross_origin(supports_credentials=True)
 def addUserToGroup():
     data = request.form.to_dict()
     mail = data['Mail']
@@ -83,6 +90,7 @@ def addUserToGroup():
     return "Added user " + mail + " to group " + group, 201
 
 @app.route('/newVoting', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def newVote():
     data = request.form.to_dict()
     question = data['Question']
@@ -123,6 +131,7 @@ def newVote():
     return "Created new voting", 201
 
 @app.route('/checkVote', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def checkVote():
     data = request.form.to_dict()
     voteNumber = data['VoteNumber']
@@ -134,6 +143,7 @@ def checkVote():
     return "Voting not found", 404
 
 @app.route('/addVote', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def addVote():
     data = request.form.to_dict()
     voteNumber = data['VoteNumber']
@@ -155,12 +165,14 @@ def addVote():
     return "Voting not found", 404
 
 @app.route('/groups', methods=['GET'])
+@cross_origin(supports_credentials=True)
 def groups():
     user = UserDB()
     groups = user.GetAllGroups()
     return json.dumps(groups), 200
 
 @app.route('/adminLogin', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def adminLogin():
     data = request.form.to_dict()
     mail = data['Mail']
@@ -180,6 +192,7 @@ def adminLogin():
     return "Wrong password", 403
 
 @app.route('/newAdmin', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def newAdmin():
     data = request.form.to_dict()
     mail = data['Mail']
