@@ -26,10 +26,10 @@ function admin_log() {
         contentType: 'application/json',
         traditional: true,
         success: function (response) {
-            console.log(response)
+            window.location.replace(path + "admin.html?")
         },
         error: function (response) {
-            console.log(response)
+            console.log("problem")
         }
     })
 }
