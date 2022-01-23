@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, jsonify
+from flask import Flask, request, send_file, jsonify, Response
 from flask_cors import CORS, cross_origin
 from OTP import OTP
 from Mailing import Mailing
@@ -14,6 +14,18 @@ import json
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
+cors = CORS(app, resources={r"/api/*": {"origins": "*", "allow_headers": "*", "expose_headers": "*"}})
+
+
+
+
+@app.route('/html/admin_panel')
+def admin_panel():
+    file = open('../admin.html')
+    content = file.read()
+    file.close()
+    return Response(content, mimetype="text/html")
+
 
 @app.route('/newUser', methods=['POST'])
 @cross_origin(supports_credentials=True)
@@ -78,17 +90,17 @@ def allVotings():
             i["początek"] = str(i["początek"])
             i["koniec"] = str(i["koniec"])
             allVotings.append(i)
-    return json.dumps(allVotings), 200
+    return jsonify(allVotings)
 
-@app.route('/results', methods=['GET'])
+@app.route('/results', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def results():
-    data = request.form.to_dict()
+    data = request.get_json()
     voteNumber = data['VoteNumber']
     vote = VoteDB()
     results = vote.GetVoteResults(voteNumber)
     if results != None:
-        return json.dumps(results), 200
+        return jsonify(results)
     return "Voting not found", 404
 
 @app.route('/userResults', methods=['GET'])
