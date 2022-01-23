@@ -4,6 +4,7 @@ $(document).ready(function () {
     get_groups()
     get_votings()
     $('#ul-votings').on('click', 'li', get_voting_result)
+    console.log('document ready')
 })
 
 

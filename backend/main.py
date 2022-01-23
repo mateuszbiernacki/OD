@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, jsonify, Response
+from flask import Flask, request, send_file, jsonify, Response, current_app
 from flask_cors import CORS, cross_origin
 from OTP import OTP
 from Mailing import Mailing
@@ -12,19 +12,32 @@ import datetime
 import json
 
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='',
+            static_folder='static')
 CORS(app, support_credentials=True)
 cors = CORS(app, resources={r"/api/*": {"origins": "*", "allow_headers": "*", "expose_headers": "*"}})
 
 
 
 
-@app.route('/html/admin_panel')
-def admin_panel():
-    file = open('../admin.html')
-    content = file.read()
-    file.close()
-    return Response(content, mimetype="text/html")
+@app.route('/admin_panel_html')
+def admin_panel_html():
+    return current_app.send_static_file('admin.html')
+
+@app.route('/login_html')
+def login_html():
+    return current_app.send_static_file('login.html')
+
+@app.route('/reg_html')
+def reg_html():
+    return current_app.send_static_file('reg.html')
+
+@app.route('/voting_card_html')
+def voting_card_html():
+    return current_app.send_static_file('voting_card.html')
+
+
 
 
 @app.route('/newUser', methods=['POST'])
