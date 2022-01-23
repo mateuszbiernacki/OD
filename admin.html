@@ -8,6 +8,7 @@
     <title>Zarejestruj się</title>
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="admin.css">
 
 </head>
 <body>
@@ -23,8 +24,55 @@
                             <div id="groups">
                                 <h4>Grupy:</h4>
                                 <ul id="ul-groups">
-                                    <li>test</li>
                                 </ul>
+                                <input type="text" id="new-group-name">
+                                <button id="new-group-button">Dodaj grupę</button>
+                            </div>
+                            <div id="votings">
+                                <h4>Głosowania:</h4>
+                                <ul id="ul-votings">
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                    <li>dupa</li>
+                                </ul>
+                                <br>
+                                <input type="text" id="new-voting-name" placeholder="Nazwa nowego głosowania">
+                                <button id="new-voting-button">Dodaj głosowanie</button>
+                                <br>
+                                <span>Czy tajne?</span>
+                                <input type="checkbox" id="secret-checkbox">
+                                <br>
+                                <span>Kworum</span>
+                                <input id="qorum-number" type="number">
+                                <br>
+                                <span>Data od</span>
+                                <input id="date-from" type="datetime-local">
+                                <span>Data do</span>
+                                <input id="date-to" type="datetime-local">
+                                <br>
+                                <span>Opcje (rozdzielane przecinkiem)</span>
+                                <input id="options-input" type="text">
+                                <br>
+                                <span>Nazwy grup (rozdzielane przecinkiem)</span>
+                                <input id="grups-input" type="text">
+
+
                             </div>
 
                         </div>
@@ -55,13 +103,9 @@
         </div>
         <div class="col" id="c2">
             <br><br>
-            <div class="title">CYBER VOTING to system:</div>
-            <ul class="info">
-                <li>do tworzenia ankiet, głosowań,</li>
-                <li>zapewniający bezpieczeństwo,</li>
-                <li>szyfrujący oddane głosy,</li>
-                <li>prezentujący wyniki w przejrzysty sposób.</li>
-            </ul>
+            <div class="title">Wyniki głosowania: <span id="voting-title"></span></div>
+            <div id="voting-question"></div>
+            <div id="voting-result"></div>
         </div>
     </div>
 </div>

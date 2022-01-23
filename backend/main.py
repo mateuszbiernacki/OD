@@ -23,6 +23,7 @@ def newUser():
     lastName = data['LastName']
     mail = data['Mail']
     groups = data['Groups'].split(',')
+    print(groups, 'dupa')
     otp = OTP()
     imgName, secret = otp.generateQRCode(mail)
     auth = AuthDB()
