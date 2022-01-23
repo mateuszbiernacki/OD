@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, jsonify
+from flask import Flask, request, send_file, jsonify, Response, current_app
 from flask_cors import CORS, cross_origin
 from OTP import OTP
 from Mailing import Mailing
@@ -12,8 +12,33 @@ import datetime
 import json
 
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='',
+            static_folder='static')
 CORS(app, support_credentials=True)
+cors = CORS(app, resources={r"/api/*": {"origins": "*", "allow_headers": "*", "expose_headers": "*"}})
+
+
+
+
+@app.route('/admin_panel_html')
+def admin_panel_html():
+    return current_app.send_static_file('admin.html')
+
+@app.route('/login_html')
+def login_html():
+    return current_app.send_static_file('login.html')
+
+@app.route('/reg_html')
+def reg_html():
+    return current_app.send_static_file('reg.html')
+
+@app.route('/voting_card_html')
+def voting_card_html():
+    return current_app.send_static_file('voting_card.html')
+
+
+
 
 @app.route('/newUser', methods=['POST'])
 @cross_origin(supports_credentials=True)
@@ -78,17 +103,17 @@ def allVotings():
             i["początek"] = str(i["początek"])
             i["koniec"] = str(i["koniec"])
             allVotings.append(i)
-    return json.dumps(allVotings), 200
+    return jsonify(allVotings)
 
-@app.route('/results', methods=['GET'])
+@app.route('/results', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def results():
-    data = request.form.to_dict()
+    data = request.get_json()
     voteNumber = data['VoteNumber']
     vote = VoteDB()
     results = vote.GetVoteResults(voteNumber)
     if results != None:
-        return json.dumps(results), 200
+        return jsonify(results)
     return "Voting not found", 404
 
 @app.route('/userResults', methods=['GET'])
