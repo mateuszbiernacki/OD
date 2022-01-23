@@ -16,7 +16,6 @@ app = Flask(__name__,
             static_url_path='',
             static_folder='static')
 CORS(app, support_credentials=True)
-cors = CORS(app, resources={r"/api/*": {"origins": "*", "allow_headers": "*", "expose_headers": "*"}})
 
 
 
@@ -108,7 +107,9 @@ def allVotings():
 @app.route('/results', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def results():
+    print('hej')
     data = request.get_json()
+    print(data, 'cz')
     voteNumber = data['VoteNumber']
     vote = VoteDB()
     results = vote.GetVoteResults(voteNumber)

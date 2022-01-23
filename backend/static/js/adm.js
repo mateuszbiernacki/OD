@@ -55,19 +55,14 @@ function get_voting_result() {
     console.log("dupa")
 
     $.ajax({
-        url: 'http://127.0.0.1:5000/result',
-        data_to_send: JSON.stringify(data_to_send),
+        url: 'http://127.0.0.1:5000/results',
+        data: JSON.stringify(data_to_send),
         dataType: 'json',
-        contentType: 'application/json',
         type: 'POST',
-        xhrFields: {
-            withCredentials: true
-        },
-        crossDomain: true,
+        contentType: 'application/json',
         traditional: true,
         success: function (response) {
             console.log(response)
-            console.log('hura')
         },
         error: function (response) {
             console.log(response)
