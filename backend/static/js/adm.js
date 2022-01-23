@@ -49,6 +49,8 @@ function get_votings() {
 
 function get_voting_result() {
     let voting_id = $(this).attr('id')
+    let voting_text = $(this).text()
+    $('#voting-question span').text(voting_text)
     let data_to_send = {
         'VoteNumber': voting_id
     }
@@ -62,7 +64,10 @@ function get_voting_result() {
         contentType: 'application/json',
         traditional: true,
         success: function (response) {
-            console.log(response)
+            $("#ul-voting-result li").remove()
+            $.each(response, function (index, value){
+                $("#ul-voting-result").append("<li>"+ value['wybór']+ ": "+ value['głosów'] + "</li>")
+            })
         },
         error: function (response) {
             console.log(response)
