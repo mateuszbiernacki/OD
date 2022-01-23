@@ -37,7 +37,7 @@ db.admin.insert(
 );
 
 db.vote.insert(
-    { "nr_głosowania":"2021/1", "pytanie":"Zajęcia zdalne", "kworum":20, "początek":"2021-12-02T9:05:00.000Z", "koniec":"2021-12-02T11:05:00.000Z",
+    { "nr_głosowania":"2021/1", "pytanie":"Zajęcia zdalne", "kworum":20, "początek":ISODate("2021-12-02T09:05:00.000Z"), "koniec":ISODate("2021-12-02T11:05:00.000Z"),
 "uprawnieni": [
     { "id":"1c88ef55801f80e116dd19ebf65ad8da137cf991e3eae10e50bc25532f5fc7facbe8c888cba65930cba55f6566b845b4ce2a4eb2109164a82302ec9ea1fb150e", "głosował":true},
     { "id":"60ad9c31ad5fe93ec4a8ef2e3c77b8ccdb9303e56c2737b318618ec2db000f20657579c8d879efd970b313e1100c1cf6f3954418ee6328f47ce4475fcca88dd9", "głosował":true},
@@ -71,7 +71,7 @@ db.vote.insert(
 });
 
 db.vote.insert(
-    { "nr_głosowania":"2021/2", "pytanie":"Sesja zdalna", "kworum":"20", "początek":"2021-12-02T12:05:00.000Z", "koniec":"2021-12-02T14:05:00.000Z", 
+    { "nr_głosowania":"2021/2", "pytanie":"Sesja zdalna", "kworum":"20", "początek":ISODate("2021-12-02T12:05:00.000Z"), "koniec":ISODate("2021-12-02T14:05:00.000Z"), 
 "uprawnieni": [
     { "id":"1c88ef55801f80e116dd19ebf65ad8da137cf991e3eae10e50bc25532f5fc7facbe8c888cba65930cba55f6566b845b4ce2a4eb2109164a82302ec9ea1fb150e", "głosował":true, "wybór":"przeciw"},
     { "id":"60ad9c31ad5fe93ec4a8ef2e3c77b8ccdb9303e56c2737b318618ec2db000f20657579c8d879efd970b313e1100c1cf6f3954418ee6328f47ce4475fcca88dd9", "głosował":true, "wybór":"za"},

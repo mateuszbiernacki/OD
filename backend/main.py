@@ -52,6 +52,21 @@ def authorize():
         return "Wrong OTP Code", 403
     return "Authorized", 200
 
+@app.route('/activeVotings', methods=['GET'])
+@cross_origin(supports_credentials=True)
+def activeVotings():
+    vote = VoteDB()
+    votings = vote.GetActiveVotings()
+    active = list()
+    for i in votings:
+        now = datetime.datetime.now()
+        result = i["początek"] <= now <= i["koniec"]
+        if result:
+            i["początek"] = str(i["początek"])
+            i["koniec"] = str(i["koniec"])
+            active.append(i)
+    return json.dumps(active), 200
+
 @app.route('/results', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def results():
@@ -143,15 +158,7 @@ def checkVote():
     if status != None:
         if status == True:
             start = vote.GetVotingStartTime(voteNumber)
-            startTime = start.split('-')
-            startTime2 = startTime[2].split('T')
-            startTime3 = startTime2[1].split(':')
-            start = datetime.datetime(int(startTime[0]), int(startTime[1]), int(startTime2[0]), int(startTime3[0]), int(startTime3[1]))
             end = vote.GetVotingEndTime(voteNumber)
-            endTime = end.split('-')
-            endTime2 = endTime[2].split('T')
-            endTime3 = endTime2[1].split(':')
-            end = datetime.datetime(int(endTime[0]), int(endTime[1]), int(endTime2[0]), int(endTime3[0]), int(endTime3[1]))
             now = datetime.datetime.now()
             result = start <= now <= end
             if result == True:
@@ -236,5 +243,3 @@ def sendEmails(emails):
 
 if __name__ == '__main__':
     app.run()
-
-

@@ -52,6 +52,12 @@ class VoteDB:
             number = number + 1
         return None
 
+    def GetActiveVotings(self):
+        voting = self.vote.find({}, {"_id":0, "nr_głosowania":1, "pytanie":1, "początek":1, "koniec":1})
+        if voting != None:
+            return voting
+        return None
+
     def GetVoteResults(self, vote_number):
         voting = self.vote.find_one({"nr_głosowania":vote_number})
         if voting != None:
