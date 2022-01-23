@@ -56,7 +56,7 @@ def authorize():
 @cross_origin(supports_credentials=True)
 def activeVotings():
     vote = VoteDB()
-    votings = vote.GetActiveVotings()
+    votings = vote.GetAllVotings()
     active = list()
     for i in votings:
         now = datetime.datetime.now()
@@ -66,6 +66,18 @@ def activeVotings():
             i["koniec"] = str(i["koniec"])
             active.append(i)
     return json.dumps(active), 200
+
+@app.route('/allVotings', methods=['GET'])
+@cross_origin(supports_credentials=True)
+def allVotings():
+    vote = VoteDB()
+    votings = vote.GetAllVotings()
+    allVotings = list()
+    for i in votings:
+            i["początek"] = str(i["początek"])
+            i["koniec"] = str(i["koniec"])
+            allVotings.append(i)
+    return json.dumps(allVotings), 200
 
 @app.route('/results', methods=['GET'])
 @cross_origin(supports_credentials=True)
