@@ -7,29 +7,29 @@ $(document).ready(function () {
 
 
 
-function admin_reg() {
-    window.location.replace(path + "reg.html?")
-}
 
 function admin_log() {
+    window.location.replace(path + "login.html?")
+}
+
+function admin_reg() {
     let data_to_send = {
         "Mail": $("#login").val(),
-        "Password": $("#password").val(),
-        "OTPCode": $("#OTPCode").val()
+        "Password": $("#password1").val(),
     }
     console.log(data_to_send)
     $.ajax({
-        url: 'http://127.0.0.1:5000/adminLogin',
+        url: 'http://127.0.0.1:5000/newAdmin',
         data: JSON.stringify(data_to_send),
         dataType: 'json',
         type: 'POST',
         contentType: 'application/json',
         traditional: true,
         success: function (response) {
-            window.location.replace(path + "admin.html?")
+            console.log(response)
         },
         error: function (response) {
-            console.log("problem")
+            console.log(response)
         }
     })
 }

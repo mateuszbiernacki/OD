@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/login.js"></script>
     <base href="/">
     <meta charset="UTF-8">
@@ -33,8 +34,15 @@
         <li>
           <div class="li-container">
             <div class="li-div">
-              <button id="login-button" onclick="login()">Zaloguj się</button>
-
+              <label for="password"></label><input class="login-inputs" type="password" id="OTPCode" placeholder="OTPCode">
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="li-container">
+            <div class="li-div">
+              <button type="submit" id="login-button">Zaloguj się</button>
+              <button type="submit" id="reg-button">Rejestracja</button>
             </div>
           </div>
         </li>

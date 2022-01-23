@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS, cross_origin
 from OTP import OTP
 from Mailing import Mailing
@@ -10,6 +10,7 @@ import hashlib
 import os
 import datetime
 import json
+
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -186,12 +187,13 @@ def addVote():
 def groups():
     user = UserDB()
     groups = user.GetAllGroups()
-    return json.dumps(groups), 200
+    return jsonify(groups)
 
 @app.route('/adminLogin', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def adminLogin():
-    data = request.form.to_dict()
+    data = request.get_json()
+    print(data)
     mail = data['Mail']
     password = data['Password']
     otp_code = data['OTPCode']
@@ -205,14 +207,15 @@ def adminLogin():
 
     passwordFromDB = admin.GetAdminPassword(mail)
     if passwordFromDB == hashlib.sha512(password.encode()).hexdigest():
-        return "Logged in", 200
+        return jsonify({'m': 'ok'})
     return "Wrong password", 403
 
 @app.route('/newAdmin', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def newAdmin():
-    data = request.form.to_dict()
+    data = request.get_json()
     mail = data['Mail']
+    print(mail, 'dfs')
     password = data['Password']
     otp = OTP()
     imgName, secret = otp.generateQRCode(mail)
@@ -223,7 +226,7 @@ def newAdmin():
         return "Admin exists", 400
     mailing = Mailing()
     mailing.SendAdminWelcomeEmail(mail, imgName)
-    return "Added new admin " + mail, 201
+    return jsonify({"m": "ok", "mail": mail})
 
 def sendEmails(emails):
     mailing = Mailing()
