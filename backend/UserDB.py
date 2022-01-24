@@ -72,3 +72,7 @@ class UserDB:
                 if j not in groupsList:
                     groupsList.append(j)
         return groupsList
+
+    def GetAllUsers(self):
+        users = self.user.find({}, {"_id", "imię", "nazwisko", "mail", "grupy"})
+        return users
