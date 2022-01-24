@@ -22,6 +22,33 @@ CORS(app, support_credentials=True)
 def index():
     return login_html()
 
+
+@app.route('/vote')
+def vote():
+    vote_db = VoteDB()
+    user_id_ = request.args.get('user_id')
+    vote_id_ = request.args.get('vote_id')
+    vote = vote_db.GetVote(vote_id_)
+    question_ = vote['pytanie']
+    qorum_ = vote['kworum']
+    start_ = vote['początek']
+    end_ = vote['koniec']
+    print(vote['wyniki'])
+    people_number_ = len(vote['uprawnieni'])
+    options_ = []
+    for option in vote['wyniki']:
+        options_.append(option['wybór'])
+
+
+    return render_template('voting_card.html',
+                           vote_id=vote_id_,
+                           user_id=user_id_,
+                           question=question_,
+                           qorum=qorum_,
+                           people_number=people_number_,
+                           options=options_,
+                           len=len(options_))
+
 @app.route('/menu')
 def menu():
     return render_template('index.html')
@@ -109,6 +136,10 @@ def addUserToGroup():
 def admin_panel_html():
     return current_app.send_static_file('admin.html')
 
+@app.route('/happy_ending_html')
+def happy_ending_html():
+    return current_app.send_static_file('happy_ending.html')
+
 @app.route('/login_html')
 def login_html():
     return current_app.send_static_file('login.html')
@@ -123,10 +154,10 @@ def voting_card_html():
 
 
 
-@app.route('/authorize', methods=['GET'])
+@app.route('/authorize', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def authorize():
-    data = request.form.to_dict()
+    data = request.get_json()
     mail = data['Mail']
     code = data['Code']
     auth = AuthDB()
@@ -137,7 +168,7 @@ def authorize():
     result = otp.verify(code, secret)
     if result == False:
         return "Wrong OTP Code", 403
-    return "Authorized", 200
+    return jsonify({'message': 'ok'})
 
 @app.route('/activeVotings', methods=['GET'])
 @cross_origin(supports_credentials=True)
@@ -222,7 +253,7 @@ def newVote():
             entitledList.append({'id':i[2], 'głosował':'false', 'wybór':''})
         else:
             entitledList.append({'id':i[2], 'głosował':'false'})
-    sendEmails(emails)
+    sendEmails(emails, number)
     optionsList = list()
     for i in options:
         optionsList.append({'wybór':i, 'głosów':0})
@@ -258,7 +289,7 @@ def checkVote():
 @app.route('/addVote', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def addVote():
-    data = request.form.to_dict()
+    data = request.get_json()
     voteNumber = data['VoteNumber']
     userID = data['UserID']
     choice = data['Choice']
@@ -273,7 +304,7 @@ def addVote():
     if wynik:
         wynik2 = vote.AddChoice(voteNumber, choice)
         if wynik2:
-            return "Vote added", 201
+            return jsonify({'message': 'ok'})
         return "User not found", 404
     return "Voting not found", 404
 
@@ -323,10 +354,10 @@ def newAdmin():
     mailing.SendAdminWelcomeEmail(mail, imgName)
     return jsonify({"m": "ok", "mail": mail})
 
-def sendEmails(emails):
+def sendEmails(emails, vote_id):
     mailing = Mailing()
     for i in emails:
-        voting_link = "http://localhost:3000/vote?id=" + str(i[2])
+        voting_link = "http://localhost:5000/vote?user_id=" + str(i[2]) +'&vote_id=' + vote_id
         mailing.SendVotingEmail(i[0], i[1], voting_link)
 
 if __name__ == '__main__':

@@ -64,6 +64,12 @@ class VoteDB:
             return voting['wyniki']
         return None
 
+    def GetVote(self, vote_number):
+        voting = self.vote.find_one({"nr_głosowania":vote_number})
+        if voting != None:
+            return voting
+        return None
+
     def GetVoteStatus(self, vote_number, user_id):
         voting = self.vote.find_one({"nr_głosowania":vote_number})
         for i in voting['uprawnieni']:

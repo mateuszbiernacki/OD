@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/vote.js"></script>
+    <meta charset="UTF-8">
+    <title>KARTA DO GŁOSOWANIA</title>
+
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+<body>
+<span id="user-id">{{ user_id }}</span>
+<span id="vote-id">{{ vote_id }}</span>
+<div id="header-container">
+    <header class="h">KARTA GŁOSOWANIA</header>
+    <div id="question" class="h">{{ question }}</div>
+</div>
+<div id="container">
+    <div class="col" id="c1">
+        <label for="login"></label><input class="login-inputs" type="text" id="login" placeholder="Podaj adres e-mail">
+        <label for="password"></label><input class="login-inputs" type="password" id="OTPCode" placeholder="Podaj OTPCode">
+        <div class="title">{{ question }}</div>
+
+        <ul class="options">
+            {%for i in range(0, len)%}
+
+            <li><div class="li-container"><div class="li-div"><span>{{options[i]}}</span></div><div class="button-div"><button>Głosuj!</button></div></div></li>
+
+            {%endfor%}
+        </ul>
+    </div>
+    <div class="col" id="c2">
+        <div class="title">Informacje na temat głosowania:</div>
+        <ul class="info">
+            <li><span class="var" id="voters-num">{{ people_number }}</span> osób może oddać głos,</li>
+            <li><span class="var" id="kworum">{{ qorum }}</span> % uprawnionych do głosowania stanowi kworum.</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
