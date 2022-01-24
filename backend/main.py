@@ -147,7 +147,7 @@ def addUserToGroup():
 @app.route('/newVoting', methods=['POST'])
 @cross_origin(supports_credentials=True)
 def newVote():
-    data = request.form.to_dict()
+    data = request.get_json()
     question = data['Question']
     qorum = data['Qorum']
     start = data['Start'].split(' ')
@@ -184,7 +184,7 @@ def newVote():
     startInfo = datetime.datetime(int(startDate[2]), int(startDate[1]), int(startDate[0]), int(startTime[0]), int(startTime[1]))
     endInfo = datetime.datetime(int(endDate[2]), int(endDate[1]), int(endDate[0]), int(endTime[0]), int(endTime[1]))
     vote.AddNewVoting(number, question, qorum, startInfo, endInfo, entitledList, optionsList)
-    return "Created new voting", 201
+    return jsonify({'message': 'ok'})
 
 @app.route('/checkVote', methods=['GET'])
 @cross_origin(supports_credentials=True)
