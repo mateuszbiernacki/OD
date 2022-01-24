@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, jsonify, Response, current_app
+from flask import Flask, request, send_file, jsonify, Response, current_app, render_template
 from flask_cors import CORS, cross_origin
 from OTP import OTP
 from Mailing import Mailing
@@ -18,7 +18,75 @@ app = Flask(__name__,
 CORS(app, support_credentials=True)
 
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
+
+@app.route('/addUser')
+def addUser():
+    return render_template('addUser.html')
+
+
+@app.route('/addUserToG')
+def addUserToG():
+    return render_template('addUserToG.html')
+
+
+@app.route('/listUsers')
+def listUsers():
+    user = UserDB()
+    users = user.GetAllUsers()
+    lista = list()
+    for user in users:
+        lista.append(user)
+    return render_template('listUsers.html', users=lista)
+
+
+@app.route('/listGroups')
+def listGroups():
+    user = UserDB()
+    groups = user.GetAllGroups()
+    for group in groups:
+        print(group)
+    return render_template('listGroups.html', groups=groups)
+
+
+@app.route('/newUser', methods=['POST'])
+@cross_origin(supports_credentials=True)
+def newUser():
+    data = request.form.to_dict()
+    firstName = data['FirstName']
+    lastName = data['LastName']
+    mail = data['Mail']
+    groups = data['Groups'].split(',')
+    otp = OTP()
+    imgName, secret = otp.generateQRCode(mail)
+    auth = AuthDB()
+    result = auth.AddNewUser(mail, secret)
+    if result == False:
+        os.remove(imgName)
+        return render_template('newUser.html', msg="User already exists")
+    user = UserDB()
+    user.AddNewUser(firstName, lastName, mail, groups)
+    mailing = Mailing()
+    mailing.SendWelcomeEmail(firstName + ' ' + lastName, mail, imgName)
+    return render_template('newUser.html', msg='User successfully added')
+
+
+@app.route('/addUserToGroup', methods=['PUT', 'POST'])
+@cross_origin(supports_credentials=True)
+def addUserToGroup():
+    data = request.form.to_dict()
+    mail = data['Mail']
+    group = data['Group']
+    user = UserDB()
+    result = user.AddUserToGroup(mail, group)
+    if result == None:
+        return render_template('addUserToGroup.html', msg="User not found")
+    if result == False:
+        return render_template('addUserToGroup.html', msg="User already in group")
+    return render_template('addUserToGroup.html', msg="Added user " + mail + " to group " + group)
 
 @app.route('/admin_panel_html')
 def admin_panel_html():
@@ -37,29 +105,6 @@ def voting_card_html():
     return current_app.send_static_file('voting_card.html')
 
 
-
-
-@app.route('/newUser', methods=['POST'])
-@cross_origin(supports_credentials=True)
-def newUser():
-    data = request.form.to_dict()
-    firstName = data['FirstName']
-    lastName = data['LastName']
-    mail = data['Mail']
-    groups = data['Groups'].split(',')
-    print(groups, 'dupa')
-    otp = OTP()
-    imgName, secret = otp.generateQRCode(mail)
-    auth = AuthDB()
-    result = auth.AddNewUser(mail, secret)
-    if result == False:
-        os.remove(imgName)
-        return "User exists", 400
-    user = UserDB()
-    user.AddNewUser(firstName, lastName, mail, groups)
-    mailing = Mailing()
-    mailing.SendWelcomeEmail(firstName + ' ' + lastName, mail, imgName)
-    return "Added new user " + firstName + ' ' + lastName, 201
 
 @app.route('/authorize', methods=['GET'])
 @cross_origin(supports_credentials=True)
@@ -130,19 +175,6 @@ def userResults():
         return "Voting is not open", 200
     return json.dumps(userResults), 200
 
-@app.route('/addUserToGroup', methods=['PUT'])
-@cross_origin(supports_credentials=True)
-def addUserToGroup():
-    data = request.form.to_dict()
-    mail = data['Mail']
-    group = data['Group']
-    user = UserDB()
-    result = user.AddUserToGroup(mail, group)
-    if result == None:
-        return "User not Found", 404
-    if result == False:
-        return "User already in group", 200
-    return "Added user " + mail + " to group " + group, 201
 
 @app.route('/newVoting', methods=['POST'])
 @cross_origin(supports_credentials=True)
