@@ -1,5 +1,3 @@
-let path = "http://localhost:63342/OD/"
-
 $(document).ready(function () {
     $("#login-button").click(admin_log)
     $("#reg-button").click(admin_reg)
@@ -9,7 +7,7 @@ $(document).ready(function () {
 
 
 function admin_log() {
-    window.location.replace(path + "login.html?")
+    window.location.replace("/login_html")
 }
 
 function admin_reg() {
