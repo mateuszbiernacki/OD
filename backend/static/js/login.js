@@ -24,7 +24,7 @@ function admin_log() {
         contentType: 'application/json',
         traditional: true,
         success: function (response) {
-            window.location.replace('/admin_panel_html')
+            window.location.replace('/menu')
         },
         error: function (response) {
             console.log("problem")

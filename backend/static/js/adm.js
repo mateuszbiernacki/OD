@@ -6,10 +6,13 @@ $(document).ready(function () {
     $('#ul-votings').on('click', 'li', get_voting_result)
     $("#new-group-button").click(add_new_group)
     $("#new-voting-button").click(add_new_voting)
+    $("#menu").click(menu_html)
     console.log('document ready')
 })
 
-
+function menu_html() {
+    window.location.replace("/menu")
+}
 
 function get_groups() {
     $.ajax({
