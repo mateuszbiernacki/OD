@@ -20,8 +20,25 @@ CORS(app, support_credentials=True)
 
 @app.route('/')
 def index():
+    return login_html()
+
+@app.route('/menu')
+def menu():
     return render_template('index.html')
 
+@app.route('/listVotings')
+def listVotings():
+    vote = VoteDB()
+    votings = vote.GetAllVotings()
+    allVotings = list()
+    for i in votings:
+        i["początek"] = str(i["początek"])
+        i["koniec"] = str(i["koniec"])
+        allVotings.append(i)
+    lista = list()
+    for voting in allVotings:
+        lista.append(voting)
+    return render_template('listVotings.html',votings=lista)
 
 @app.route('/addUser')
 def addUser():
