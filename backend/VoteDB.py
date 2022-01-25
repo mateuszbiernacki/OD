@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 class VoteDB:
     def __init__(self):
-        self.client = MongoClient(username="admin", password="password", authSource="eVotingPP")
+        self.client = MongoClient(host="mongodb", port=27017, username="admin", password="password", authSource="eVotingPP")
         self.db = self.client.eVotingPP
         self.vote = self.db.vote
 

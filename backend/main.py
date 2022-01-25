@@ -361,4 +361,5 @@ def sendEmails(emails, vote_id):
         mailing.SendVotingEmail(i[0], i[1], voting_link)
 
 if __name__ == '__main__':
-    app.run()
+    print("Starting app")
+    app.run(host='0.0.0.0')
